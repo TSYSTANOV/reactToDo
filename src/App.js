@@ -22,18 +22,51 @@ function App() {
       })
     );
   }
-  function toggleTodoHanler(id){
-    setTodos(todos.map((todo)=>{
-      return todo.id === id ? {...todo,
-        isCompleted:!todo.isCompleted} : {...todo} 
-    }))
+  function toggleTodoHanler(id) {
+    setTodos(
+      todos.map((todo) => {
+        return todo.id === id
+          ? { ...todo, isCompleted: !todo.isCompleted }
+          : { ...todo };
+      })
+    );
   }
+  function resetTodoHandler() {
+    setTodos([]);
+  }
+  function deleteComplitedTodosHandler() {
+    setTodos(
+      todos.filter((todo) => {
+        return !todo.isCompleted;
+      })
+    );
+  }
+  const competedTodosCount = todos.filter((todo) => {
+    return todo.isCompleted;
+  }).length;
+
   return (
     <div className="App">
       <h1>Todo App</h1>
       <TodoForm addTodo={addTodoHandler} />
-      <TodosActions/>
-      <TodoList todos={todos} deleteTodo={deleteTodoHandler} toggleTodo={toggleTodoHanler}/>
+      {todos.length > 0 && (
+        <TodosActions
+          completedTososExist={!Boolean(competedTodosCount)}
+          resetTodo={resetTodoHandler}
+          deleteCompletedTodo={deleteComplitedTodosHandler}
+        />
+      )}
+      <TodoList
+        todos={todos}
+        deleteTodo={deleteTodoHandler}
+        toggleTodo={toggleTodoHanler}
+      />
+      {competedTodosCount > 0 && (
+        <h2>
+          You have a {competedTodosCount} completed{" "}
+          {competedTodosCount > 1 ? "ToDos" : "ToDo"}
+        </h2>
+      )}
     </div>
   );
 }
